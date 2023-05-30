@@ -1,18 +1,27 @@
-import { getPaints } from "./database.js";
+import { getPaints, setPaint } from "./database.js";
 
 const paints = getPaints()
 
+document.addEventListener(
+    "change",
+    (e) => {
+        if(e.target.id === "paint") {     
+            setPaint(parseInt(e.target.value))
+        }
+    }
+)
+
 export const Paints = () => {
-    let html = "<ul>"
-
-    const listItems = paints.map(paint => {
-        return `<li>
-            <input type="radio" name="paint" value="${paint.id}" /> ${paint.name}
-        </li>`
-    })
-
-    html += listItems.join("")
-    html += "</ul>"
-
-    return html
+    return `<h2>Paints</h2>
+        <select id="paint">
+            <option value="0">Select paint</option>
+            ${
+                paints.map(
+                    (paint) => {
+                        return `<option value="${paint.id}">${paint.name}</option>`
+                    }
+                ).join("")
+            }
+        </select>
+        `
 }

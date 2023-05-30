@@ -2,6 +2,19 @@ import { Wheels } from "./Wheels.js"
 import { Technologies } from "./Technologies.js"
 import { Paints } from "./Paints.js"
 import { Interiors } from "./Interiors.js"
+import { Orders } from "./Orders.js"
+import { addCustomOrder } from "./database.js"
+
+document.addEventListener(
+    "click",
+    (e) => {
+        const itemClicked = e.target
+
+        if (itemClicked.id.startsWith("orderButton")) {
+            addCustomOrder()
+        }
+    }
+)
 
 
 export const CarsRUs = () => {
@@ -10,21 +23,26 @@ export const CarsRUs = () => {
 
     <article class="choices">
         <section class="choices_wheels options">
-            <h2>Wheels</h2>
             ${Wheels()}
         </section>
         <section class="choices_technologies options">
-            <h2>Technologies</h2>
             ${Technologies()}
         </section>
         <section class="choices_paints options">
-            <h2>Paints</h2>
             ${Paints()}
         </section>
         <section class="choices_interiors options">
-            <h2>Interiors</h2>
             ${Interiors()}
         </section>
+    </article>
 
+    <article>
+        <button id="orderButton">Create Custom Order</button>
+    </article>
+
+    <article class="customOrders">
+        <h2>Custom Car Orders</h2>
+        ${Orders()}
+    </article>
     `
 }

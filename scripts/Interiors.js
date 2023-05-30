@@ -1,18 +1,27 @@
-import { getInteriors } from "./database.js";
+import { getInteriors, setInterior } from "./database.js";
 
 const interiors = getInteriors()
 
+document.addEventListener(
+    "change",
+    (e) => {
+        if(e.target.id === "interior") {     
+            setInterior(parseInt(e.target.value))
+        }
+    }
+)
+
 export const Interiors = () => {
-    let html = "<ul>"
-
-    const listItems = interiors.map(interior => {
-        return `<li>
-            <input type="radio" name="interior" value="${interior.id}" /> ${interior.name}
-        </li>`
-    })
-
-    html += listItems.join("")
-    html += "</ul>"
-
-    return html
+    return `<h2>Interiors</h2>
+        <select id="interior">
+            <option value="0">Select interior</option>
+            ${
+                interiors.map(
+                    (interior) => {
+                        return `<option value="${interior.id}">${interior.name}</option>`
+                    }
+                ).join("")
+            }
+        </select>
+        `
 }
