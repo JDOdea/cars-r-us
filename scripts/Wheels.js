@@ -1,6 +1,6 @@
 import { getWheels, setWheels } from "./database.js";
 
-const wheels = getWheels()
+const wheels = await getWheels()
 
 document.addEventListener(
     "change",
@@ -18,7 +18,7 @@ export const Wheels = () => {
             ${
                 wheels.map(
                     (wheel) => {
-                        return `<option value="${wheel.id}">${wheel.name}</option>`
+                        return `<option value="${wheel.id}">${wheel.style}</option>`
                     }
                 ).join("")
             }

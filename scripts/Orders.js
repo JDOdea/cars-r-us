@@ -1,64 +1,30 @@
-import { getInteriors, getOrders, getPaints, getTechnologies, getWheels } from "./database.js";
+import { completeOrder, getOrders } from "./database.js";
 
-const wheels = getWheels()
-const technologies = getTechnologies()
-const paints = getPaints()
-const interiors = getInteriors()
+document.addEventListener("click", (e) => {
+    const { name, id } = e.target;
+    if (name === "complete") {
+        completeOrder(id);
+    }
+});
 
-
-
-const buildOrderListItem = (order) => {
-
-    const foundWheels = wheels.find(
-        (wheel) => {
-            return wheel.id === order.wheelId
-        }
-    )
-    let totalCost = foundWheels.price
-
-    const foundTechnologies = technologies.find(
-        (tech) => {
-            return tech.id === order.technologyId
-        }
-    )
-    totalCost += foundTechnologies.price
-
-    const foundPaints = paints.find(
-        (paint) => {
-            return paint.id === order.paintId
-        }
-    )
-    totalCost += foundPaints.price
-
-    const foundInteriors = interiors.find(
-        (interior) => {
-            return interior.id === order.interiorId
-        }
-    )
-    totalCost += foundInteriors.price
-
-    const costString = totalCost.toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD"
+export const Orders = async () => {
+    const orders = await getOrders()
+    return `${orders
+    .map((order) => {
+        return `<section class="order">
+                    ${order.paintColor.color} car with
+                    ${order.wheels.style} wheels,
+                    ${order.interior.material} interior,
+                    and the ${order.technology.package}
+                    for a total cost of
+                    ${(
+                        order.totalCost
+                    ).toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                    })}
+                    <input type="button" name="complete" id="${order.id}" value="Complete">
+                </section>`;
     })
-
-    return `<li>
-        Order #${order.id} cost ${costString}
-        </li>`
-}
-
-
-
-export const Orders = () => {
-
-    const orders = getOrders()
-
-    let html = "<ul>"
-
-    const listItems = orders.map(buildOrderListItem)
-
-    html += listItems.join("")
-    html += "</ul>"
-
-    return html
+    .join("")}`;
 }

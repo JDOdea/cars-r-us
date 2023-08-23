@@ -1,6 +1,6 @@
 import { getInteriors, setInterior } from "./database.js";
 
-const interiors = getInteriors()
+const interiors = await getInteriors()
 
 document.addEventListener(
     "change",
@@ -18,7 +18,7 @@ export const Interiors = () => {
             ${
                 interiors.map(
                     (interior) => {
-                        return `<option value="${interior.id}">${interior.name}</option>`
+                        return `<option value="${interior.id}">${interior.material}</option>`
                     }
                 ).join("")
             }

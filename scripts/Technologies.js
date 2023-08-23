@@ -1,6 +1,6 @@
 import { getTechnologies, setTechnology } from "./database.js";
 
-const technologies = getTechnologies()
+const technologies = await getTechnologies()
 
 document.addEventListener(
     "change",
@@ -18,7 +18,7 @@ export const Technologies = () => {
             ${
                 technologies.map(
                     (tech) => {
-                        return `<option value="${tech.id}">${tech.name}</option>`
+                        return `<option value="${tech.id}">${tech.package}</option>`
                     }
                 ).join("")
             }

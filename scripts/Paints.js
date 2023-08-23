@@ -1,6 +1,6 @@
 import { getPaints, setPaint } from "./database.js";
 
-const paints = getPaints()
+const paints = await getPaints()
 
 document.addEventListener(
     "change",
@@ -18,7 +18,7 @@ export const Paints = () => {
             ${
                 paints.map(
                     (paint) => {
-                        return `<option value="${paint.id}">${paint.name}</option>`
+                        return `<option value="${paint.id}">${paint.color}</option>`
                     }
                 ).join("")
             }

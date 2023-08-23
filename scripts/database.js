@@ -37,24 +37,34 @@ const database = {
 }
 
 //Database Exports
-export const getPaints = () => {
-    return database.paints.map(paint => ({...paint}))
+export const getPaints = async () => {
+    const res = await fetch("https://localhost:7287/paintcolors");
+    const data = await res.json();
+    return data;
 }
 
-export const getInteriors = () => {
-    return database.interiors.map(interior => ({...interior}))
+export const getInteriors = async () => {
+    const res = await fetch("https://localhost:7287/interiors");
+    const data = await res.json();
+    return data;
 }
 
-export const getTechnologies = () => {
-    return database.technologies.map(technology => ({...technology}))
+export const getTechnologies = async () => {
+    const res = await fetch("https://localhost:7287/technologies");
+    const data = await res.json();
+    return data;
 }
 
-export const getWheels = () => {
-    return database.wheels.map(wheel => ({...wheel}))
+export const getWheels = async () => {
+    const res = await fetch("https://localhost:7287/wheels");
+    const data = await res.json();
+    return data;
 }
 
-export const getOrders = () => {
-    return database.customOrders.map(customOrder => ({...customOrder}))
+export const getOrders = async () => {
+    const res = await fetch("https://localhost:7287/orders");
+    const data = await res.json();
+    return data;
 }
 
 //Export functions to set state
@@ -75,23 +85,30 @@ export const setWheels = (id) => {
 }
 
 //Export function to implement customOrder
-export const addCustomOrder = () => {
+export const addCustomOrder = async () => {
     //Copy current state of user choices
     const newOrder = {...database.orderBuilder}
 
-    //Add a new primary key to the object
-    const lastIndex = database.customOrders.length - 1
-    newOrder.id = database.customOrders[lastIndex].id + 1
-
-    //Add a timestamp to the order
-    newOrder.timestamp = Date.now()
-
-    //Add the new order object to custom orders state
-    database.customOrders.push(newOrder)
+    //Send newOrder to API
+    await fetch(`https://localhost:7287/orders`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newOrder),
+    });
 
     //Reset the temporary state for user choices
     database.orderBuilder = {}
 
     //Broadcast a notification that the permanent state has changed
     document.dispatchEvent(new CustomEvent("stateChanged"))
+}
+
+//Export function to complete order
+export const completeOrder = async (orderId) => {
+    await fetch(`https://localhost:7287/orders/${orderId}/fulfill`, {
+        method: "POST",
+    });
+    document.dispatchEvent(new CustomEvent("stateChanged"));
 }
